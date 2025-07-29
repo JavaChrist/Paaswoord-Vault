@@ -1,0 +1,6 @@
+// FICHIER TEMPORAIREMENT DESACTIVE
+// Les utilitaires crypto seront reactives une fois l'application de base fonctionnelle
+
+// Fichier original: src/utils/crypto.ts
+// Contient le chiffrement AES-256 avec PBKDF2
+// Sera remis en service dans la phase suivante 
