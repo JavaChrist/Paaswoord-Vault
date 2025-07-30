@@ -1,12 +1,13 @@
 {
-  "short_name": "PWAStarter",
-  "name": "React Vite Tailwind Firebase PWA",
+  "short_name": "Password Vault",
+  "name": "Password Vault - Gestionnaire de mots de passe",
   "icons": [
-    { "src": "/logo192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/logo512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/icon180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon512.png", "sizes": "512x512", "type": "image/png" }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#ffffff",
+  "theme_color": "#1f2937",
   "background_color": "#ffffff"
 }
