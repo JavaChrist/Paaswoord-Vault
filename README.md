@@ -376,12 +376,14 @@ MIT - Utilisez librement pour vos projets personnels et commerciaux.
 
 ## ✨ Fonctionnalités
 
-- 🔐 **Chiffrement AES-256-GCM** avec PBKDF2 (100,000 itérations)
-- 🔑 **Authentification Firebase** avec mode démo intégré
-- 📱 **Interface responsive** avec Tailwind CSS
-- 🎨 **Design monochrome professionnel** (noir/blanc/gris)
-- 🚀 **React + TypeScript** pour une expérience moderne
-- ☁️ **Sauvegarde Firebase** (données chiffrées côté client)
+- 🔐 **Gestion complète des mots de passe** (Comptes, Cartes, Crypto, etc.)
+- 🔑 **Authentification Firebase** sécurisée
+- 📱 **Synchronisation multi-appareils** en temps réel
+- 🎨 **Interface style "Sésame"** avec design moderne (noir/orange)
+- 🚀 **React + TypeScript + Vite** pour des performances optimales
+- ☁️ **Sauvegarde Firestore** avec règles de sécurité
+- 📋 **Copie individuelle** de tous les champs (CVV, PIN, clés crypto...)
+- 🔍 **Recherche** et organisation par sections alphabétiques
 
 ## 🚀 Démarrage rapide
 
@@ -400,14 +402,13 @@ npm run dev
 
 L'application sera disponible sur : **http://localhost:5173**
 
-## 🔑 Mode démo
+## 📱 Types de comptes supportés
 
-L'application fonctionne **sans configuration Firebase** grâce au mode démo :
-
-- **Email :** `demo@example.com`
-- **Mot de passe :** `demo123`
-
-Pour utiliser Firebase en production, configure le fichier `.env.local` avec tes clés.
+- **🧑 Comptes classiques** : Email/mot de passe traditionnels
+- **🌐 Connexions sociales** : "Se connecter avec" (Google, Apple, etc.)
+- **🔑 Mots de passe uniques** : Codes WiFi, digicodes, etc.
+- **💳 Cartes bancaires** : Numéro, CVV, PIN, date d'expiration
+- **₿ Portefeuilles crypto** : Clés publiques/privées, phrases de récupération
 
 ## 🏗️ Architecture
 
@@ -470,17 +471,34 @@ npm run dev
 npm run build
 ```
 
-## 📝 Configuration Firebase (optionnel)
+## 🔥 Configuration Firebase
 
-Créer un fichier `.env.local` :
+### **🚨 IMPORTANT : Firebase est maintenant OBLIGATOIRE**
+
+L'application utilise Firestore pour synchroniser tes mots de passe entre appareils.
+
+### **📋 Guide complet :**
+👉 **[FIREBASE_SETUP.md](./FIREBASE_SETUP.md)** - Guide détaillé étape par étape
+
+### **⚡ Configuration rapide :**
+
+1. **Créer un projet Firebase** sur [console.firebase.google.com](https://console.firebase.google.com/)
+2. **Activer Authentication** (Email/Password)
+3. **Activer Firestore Database**
+4. **Créer un fichier `.env`** :
 
 ```env
-VITE_FIREBASE_API_KEY=ta-clé-api
-VITE_FIREBASE_AUTH_DOMAIN=ton-projet.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=ton-projet-id
-VITE_FIREBASE_STORAGE_BUCKET=ton-projet.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=ton-sender-id
-VITE_FIREBASE_APP_ID=ton-app-id
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id_here
+VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id_here
+VITE_FIREBASE_APP_ID=your_app_id_here
+```
+
+5. **Déployer les règles de sécurité** :
+```bash
+firebase deploy --only firestore:rules
 ```
 
 ---
