@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Lock } from 'lucide-react';
+import VaultIcon from '../components/icons/VaultIcon';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -40,7 +40,7 @@ export default function Login() {
             className="mx-auto h-16 w-16 rounded-full flex items-center justify-center mb-6"
             style={{ backgroundColor: '#F97316' }}
           >
-            <Lock size={32} style={{ color: '#F5F5F5' }} />
+            <VaultIcon size={40} color="#F5F5F5" />
           </div>
           <h2 className="text-3xl font-bold" style={{ color: '#F5F5F5' }}>
             Password Vault
