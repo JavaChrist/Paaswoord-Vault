@@ -146,4 +146,18 @@ app.post('/webauthn/verify-authentication', async (req, res) => {
     await userDoc.set({ credential: { ...cred, counter: newCounter } }, { merge: true });
     res.json({ ok: true });
 });
+// Debug endpoint: retourne rpID/origin dérivés et état des credentials
+app.get('/webauthn/debug', async (req, res) => {
+    const info = deriveOriginAndRpID(req);
+    const userId = req.query.userId || '';
+    let hasCredential = false;
+    try {
+        if (userId) {
+            const snap = await db.collection('webauthn').doc(userId).get();
+            hasCredential = Boolean(snap.get('credential'));
+        }
+    }
+    catch { }
+    res.json({ ...info, userId, hasCredential, headers: { origin: req.headers['origin'], host: req.headers['host'], xfHost: req.headers['x-forwarded-host'], xfProto: req.headers['x-forwarded-proto'] } });
+});
 exports.webauthnApi = functions.https.onRequest(app);
