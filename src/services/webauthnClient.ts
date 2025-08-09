@@ -48,6 +48,7 @@ export async function registerPasskey(userId: string, email: string): Promise<vo
   const { options } = await postJson<WebAuthnRegistrationOptionsResponse>(
     '/webauthn/generate-registration-options',
     { userId, email },
+    { headers: { 'X-Requested-With': 'XMLHttpRequest' } },
   );
 
   const attestation = await startRegistration(options);
@@ -68,6 +69,7 @@ export async function authenticatePasskey(userId: string): Promise<void> {
   const { options } = await postJson<WebAuthnAuthenticationOptionsResponse>(
     '/webauthn/generate-authentication-options',
     { userId },
+    { headers: { 'X-Requested-With': 'XMLHttpRequest' } },
   );
 
   const assertion = await startAuthentication(options);

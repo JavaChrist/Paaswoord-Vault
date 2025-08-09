@@ -13,8 +13,25 @@ import {
 admin.initializeApp();
 const db = admin.firestore();
 
-const rpID = process.env.WEBAUTHN_RPID || 'localhost';
-const origin = process.env.WEBAUTHN_ORIGIN || `https://${rpID}`;
+const DEFAULT_RPID = process.env.WEBAUTHN_RPID || 'localhost';
+const DEFAULT_ORIGIN = process.env.WEBAUTHN_ORIGIN || `https://${DEFAULT_RPID}`;
+
+function deriveOriginAndRpID(req: Request): { origin: string; rpID: string } {
+  try {
+    const headerOrigin = (req.headers['origin'] as string) || '';
+    if (headerOrigin && headerOrigin.startsWith('https://')) {
+      const url = new URL(headerOrigin);
+      return { origin: headerOrigin, rpID: url.hostname };
+    }
+    const forwardedProto = (req.headers['x-forwarded-proto'] as string) || 'https';
+    const forwardedHost = (req.headers['x-forwarded-host'] as string) || (req.headers['host'] as string) || DEFAULT_RPID;
+    const builtOrigin = `${forwardedProto}://${forwardedHost}`;
+    const url = new URL(builtOrigin);
+    return { origin: builtOrigin, rpID: url.hostname };
+  } catch {
+    return { origin: DEFAULT_ORIGIN, rpID: DEFAULT_RPID };
+  }
+}
 
 interface StoredCredential {
   credentialID: string;
@@ -28,6 +45,7 @@ app.use(express.json());
 
 app.post('/webauthn/generate-registration-options', async (req: Request, res: Response) => {
   const { userId, email } = req.body as { userId: string; email: string };
+  const { rpID } = deriveOriginAndRpID(req);
   const userDoc = db.collection('webauthn').doc(userId);
   const options = await generateRegistrationOptions({
     rpName: 'Password Vault',
@@ -43,6 +61,7 @@ app.post('/webauthn/generate-registration-options', async (req: Request, res: Re
 
 app.post('/webauthn/verify-registration', async (req: Request, res: Response) => {
   const { userId, attestation } = req.body as any;
+  const { origin, rpID } = deriveOriginAndRpID(req);
   const userDoc = db.collection('webauthn').doc(userId);
   const snap = await userDoc.get();
   const expectedChallenge = snap.get('challenge');
@@ -66,13 +85,14 @@ app.post('/webauthn/verify-registration', async (req: Request, res: Response) =>
 
 app.post('/webauthn/generate-authentication-options', async (req: Request, res: Response) => {
   const { userId } = req.body as { userId: string };
+  const { rpID } = deriveOriginAndRpID(req);
   const userDoc = db.collection('webauthn').doc(userId);
   const snap = await userDoc.get();
   const cred = snap.get('credential') as StoredCredential | undefined;
   const options = await generateAuthenticationOptions({
     rpID,
     userVerification: 'required',
-    allowCredentials: cred ? [{ id: cred.credentialID } as any] : [],
+    allowCredentials: cred ? [{ id: Buffer.from(cred.credentialID, 'base64url') }] : [],
   } as any);
   await userDoc.set({ challenge: options.challenge }, { merge: true });
   res.json({ options });
@@ -80,6 +100,7 @@ app.post('/webauthn/generate-authentication-options', async (req: Request, res: 
 
 app.post('/webauthn/verify-authentication', async (req: Request, res: Response) => {
   const { userId, assertion } = req.body as any;
+  const { origin, rpID } = deriveOriginAndRpID(req);
   const userDoc = db.collection('webauthn').doc(userId);
   const snap = await userDoc.get();
   const expectedChallenge = snap.get('challenge');
