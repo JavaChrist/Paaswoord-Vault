@@ -6,9 +6,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="md:flex md:items-center md:justify-between">
           <div className="flex items-center space-x-4">
-            <img src="/logo192.png" alt="Logo" className="h-6 w-6" />
+            <img src="/icon192.png" alt="Password Vault Logo" className="h-6 w-6" />
             <span className="text-sm text-gray-600">
-              © {currentYear} React Starter. Tous droits réservés.
+              © {currentYear} Password Vault. Tous droits réservés.
             </span>
           </div>
 

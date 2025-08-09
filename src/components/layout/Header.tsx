@@ -28,9 +28,9 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo et titre */}
           <div className="flex items-center">
-            <img src="/logo192.png" alt="Logo" className="h-8 w-8 mr-3" />
+            <img src="/icon192.png" alt="Password Vault Logo" className="h-8 w-8 mr-3" />
             <h1 className="text-xl font-semibold text-gray-900">
-              Mon Application
+              Password Vault
             </h1>
           </div>
 
