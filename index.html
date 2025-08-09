@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,19 +8,24 @@
   <link rel="icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/icon180.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/icon180.png" />
+  <link rel="apple-touch-startup-image" href="/icon512.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Password Vault" />
-  
+
   <title>🔐 Password Vault - Gestionnaire de mots de passe</title>
 </head>
+
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(() => console.log('SW registered'));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(() => console.log('SW registered'));
+      });
     }
   </script>
 </body>
+
 </html>
