@@ -80,8 +80,8 @@ app.post('/webauthn/verify-registration', async (req, res) => {
     const { credentialPublicKey, credentialID, counter } = verification.registrationInfo;
     await userDoc.set({
         credential: {
-            credentialID: credentialID,
-            publicKey: credentialPublicKey,
+            credentialID: Buffer.from(credentialID).toString('base64url'),
+            publicKey: Buffer.from(credentialPublicKey).toString('base64url'),
             counter,
         },
     }, { merge: true });

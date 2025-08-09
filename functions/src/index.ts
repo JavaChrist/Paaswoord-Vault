@@ -56,8 +56,8 @@ app.post('/webauthn/verify-registration', async (req: Request, res: Response) =>
   const { credentialPublicKey, credentialID, counter } = verification.registrationInfo;
   await userDoc.set({
     credential: {
-      credentialID: (credentialID as any),
-      publicKey: (credentialPublicKey as any),
+      credentialID: Buffer.from(credentialID).toString('base64url'),
+      publicKey: Buffer.from(credentialPublicKey).toString('base64url'),
       counter,
     } as StoredCredential,
   }, { merge: true });
@@ -72,7 +72,7 @@ app.post('/webauthn/generate-authentication-options', async (req: Request, res: 
   const options = await generateAuthenticationOptions({
     rpID,
     userVerification: 'required',
-    allowCredentials: cred ? [{ id: cred.credentialID }] : [],
+    allowCredentials: cred ? [{ id: cred.credentialID } as any] : [],
   } as any);
   await userDoc.set({ challenge: options.challenge }, { merge: true });
   res.json({ options });

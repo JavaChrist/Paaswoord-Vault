@@ -23,7 +23,10 @@ export interface WebAuthnAuthenticationVerifyRequest {
 
 // Réponses renvoyées par le navigateur
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+const API_BASE =
+  (import.meta as any).env?.VITE_FUNCTIONS_BASE_URL ||
+  (import.meta as any).env?.VITE_API_BASE_URL ||
+  '/api';
 
 async function postJson<T>(path: string, body: unknown, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
