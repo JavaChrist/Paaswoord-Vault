@@ -1,11 +1,17 @@
-const CACHE_NAME = "pv-static-v1";
+const CACHE_NAME = "pv-static-v2";
+const SCOPE_PATH = new URL(self.registration.scope).pathname.replace(
+  /\/$/,
+  "/"
+);
+const asset = (p) =>
+  p.startsWith("/") ? `${SCOPE_PATH}${p.slice(1)}` : `${SCOPE_PATH}${p}`;
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/icon192.png",
-  "/icon512.png",
-  "/icon180.png",
-  "/manifest.json",
+  asset(""),
+  asset("index.html"),
+  asset("icon192.png"),
+  asset("icon512.png"),
+  asset("icon180.png"),
+  asset("manifest.json"),
 ];
 
 self.addEventListener("install", (event) => {
@@ -30,7 +36,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
 
   // API: toujours réseau
-  if (url.pathname.startsWith("/api/")) {
+  if (url.pathname.startsWith(`${SCOPE_PATH}api/`)) {
     event.respondWith(fetch(request));
     return;
   }
@@ -38,7 +44,7 @@ self.addEventListener("fetch", (event) => {
   // Navigation (SPA): retourner index.html
   if (request.mode === "navigate") {
     event.respondWith(
-      fetch("/index.html").catch(() => caches.match("/index.html"))
+      fetch(asset("index.html")).catch(() => caches.match(asset("index.html")))
     );
     return;
   }

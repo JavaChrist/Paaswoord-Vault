@@ -4,6 +4,11 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "rewrites": [{ "source": "/api/**", "function": "webauthnApi" }]
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "/api/**", "function": "webauthnApi" },
+      { "source": "**", "destination": "/index.html" }
+    ]
   }
 }
