@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Search, Settings, Plus, Copy, LogOut } from 'lucide-react';
+import { Search, Settings, Plus, Copy, LogOut, KeyRound } from 'lucide-react';
 import AddPasswordModal from '../components/modals/AddPasswordModal';
 import ViewPasswordModal from '../components/modals/ViewPasswordModal';
 import CopyNotification from '../components/CopyNotification';
@@ -13,6 +13,7 @@ import {
   generateDisplayIdentifier,
   PasswordEntry
 } from '../services/passwordService';
+import { registerPasskey } from '../services/webauthnClient';
 
 // Interface importée depuis passwordService
 
@@ -29,6 +30,7 @@ export default function Dashboard() {
   const [passwordEntries, setPasswordEntries] = useState<PasswordEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [platformSupported, setPlatformSupported] = useState(false);
 
   // Charger les mots de passe depuis Firebase
   useEffect(() => {
@@ -50,6 +52,32 @@ export default function Dashboard() {
 
     loadPasswords();
   }, [currentUser]);
+
+  // Détection support Passkeys (plateforme)
+  useEffect(() => {
+    (async () => {
+      try {
+        const supported = await window.PublicKeyCredential?.isUserVerifyingPlatformAuthenticatorAvailable?.();
+        setPlatformSupported(Boolean(supported));
+      } catch {
+        setPlatformSupported(false);
+      }
+    })();
+  }, []);
+
+  const handleActivatePasskey = async () => {
+    if (!currentUser || !currentUser.email) return;
+    try {
+      await registerPasskey(currentUser.uid, currentUser.email);
+      try { localStorage.setItem('passkeyUserId', currentUser.uid); } catch { }
+      console.info('Passkey activé');
+    } catch (e) {
+      console.error('Échec activation Passkey', e);
+      setError("Échec de l'activation de FaceID/Windows Hello");
+    } finally {
+      setShowSettings(false);
+    }
+  };
 
 
 
@@ -352,6 +380,19 @@ export default function Dashboard() {
                 className="absolute top-16 left-0 border rounded-xl shadow-2xl min-w-48 z-30 overflow-hidden"
                 style={{ backgroundColor: '#2A2A2A', borderColor: '#2A2A2A' }}
               >
+                {/* Activer FaceID/Windows Hello */}
+                {platformSupported && (!localStorage.getItem('passkeyUserId')) && (
+                  <button
+                    onClick={handleActivatePasskey}
+                    className="w-full flex items-center gap-3 px-4 py-3 transition-colors"
+                    style={{ color: '#F5F5F5' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#EA580C'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    <KeyRound size={18} />
+                    <span>Activer FaceID / Windows Hello</span>
+                  </button>
+                )}
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 transition-colors"

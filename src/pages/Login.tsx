@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import FaceUnlockButton from '../components/FaceUnlockButton';
 import Modal from '../components/ui/Modal';
-import { registerPasskey } from '../services/webauthnClient';
+import { registerPasskey, authenticatePasskey } from '../services/webauthnClient';
 import { auth } from '../firebase/firebaseConfig';
 import { getWrappedKey, getUnwrapKey, unwrapMasterKey } from '../stores/vaultKeyStore';
 
@@ -19,6 +19,7 @@ export default function Login() {
   const [showPasskeyPrompt, setShowPasskeyPrompt] = useState(false);
   const [passkeyBusy, setPasskeyBusy] = useState(false);
   const [platformSupported, setPlatformSupported] = useState<boolean>(false);
+  const [tryingPasskey, setTryingPasskey] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -30,6 +31,33 @@ export default function Login() {
       }
     })();
   }, []);
+
+  // Tentative auto: si Passkey existe et plateforme supportée, essayer FaceID/Windows Hello au démarrage
+  useEffect(() => {
+    const autoTry = async () => {
+      if (!platformSupported) return;
+      const storedId = (typeof window !== 'undefined' && localStorage.getItem('passkeyUserId')) || '';
+      if (!storedId) return;
+      try {
+        setTryingPasskey(true);
+        await authenticatePasskey(storedId);
+        try {
+          const record = await getWrappedKey();
+          const unwrapKey = await getUnwrapKey();
+          if (record && unwrapKey) {
+            await unwrapMasterKey(record, unwrapKey);
+          }
+        } catch (e) {
+          console.warn('Déverrouillage masterKey après FaceID non effectué', e);
+        }
+        navigate('/vault');
+      } catch (e) {
+        console.warn('FaceID/Windows Hello indisponible, fallback mot de passe', e);
+        setTryingPasskey(false);
+      }
+    };
+    autoTry();
+  }, [platformSupported, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,6 +118,14 @@ export default function Login() {
                 {error}
               </div>
             )}
+            {tryingPasskey && (
+              <div
+                className="rounded-lg p-3 text-sm text-center"
+                style={{ backgroundColor: '#1D4ED8', color: '#F5F5F5' }}
+              >
+                Déverrouillage par FaceID / Windows Hello...
+              </div>
+            )}
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#F5F5F5' }}>
@@ -142,7 +178,7 @@ export default function Login() {
             <div>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || tryingPasskey}
                 className="w-full py-3 px-4 rounded-lg font-medium transition-colors disabled:opacity-50"
                 style={{ backgroundColor: '#F97316', color: '#F5F5F5' }}
                 onMouseEnter={(e) => !loading && (e.currentTarget.style.backgroundColor = '#EA580C')}
