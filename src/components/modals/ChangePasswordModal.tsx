@@ -66,7 +66,7 @@ export default function ChangePasswordModal({ isOpen, onClose, onChanged }: Chan
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Modifier mon mot de passe" onSave={handleSave}>
-      <div className="p-6 space-y-4">
+      <div className="p-6 space-y-4" style={{ backgroundColor: '#121212' }}>
         {error && (
           <div className="rounded-lg p-3 text-sm text-center" style={{ backgroundColor: '#DC2626', color: '#F5F5F5' }}>
             {error}
@@ -105,6 +105,9 @@ export default function ChangePasswordModal({ isOpen, onClose, onChanged }: Chan
               required
               minLength={6}
             />
+            <p className="mt-2 text-xs" style={{ color: '#B0B0B0' }}>
+              Le mot de passe doit contenir au moins 8 caractères, avec au moins une majuscule et un chiffre.
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium mb-2" style={{ color: '#F5F5F5' }}>

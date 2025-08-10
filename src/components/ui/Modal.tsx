@@ -12,7 +12,6 @@ export default function Modal({ isOpen, onClose, title, children, onSave }: Moda
   if (!isOpen) return null;
 
   const handleSave = () => {
-    // Déclenche la soumission du formulaire
     const form = document.querySelector('form') as HTMLFormElement;
     if (form) {
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
@@ -26,31 +25,40 @@ export default function Modal({ isOpen, onClose, title, children, onSave }: Moda
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        className="fixed inset-0 bg-black bg-opacity-60 transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-gray-100 shadow-2xl transition-all">
+        <div
+          className="relative w-full max-w-md transform overflow-hidden rounded-2xl shadow-2xl transition-all"
+          style={{ backgroundColor: '#2A2A2A' }}
+        >
           {/* Header */}
-          <div className="bg-gray-200 px-6 py-4">
+          <div className="px-6 py-4 border-b" style={{ borderColor: '#404040' }}>
             <div className="flex items-center justify-between">
               <button
                 onClick={onClose}
-                className="flex items-center text-gray-700 hover:text-gray-900"
+                className="flex items-center"
+                style={{ color: '#F5F5F5' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#F97316')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#F5F5F5')}
               >
                 <X size={18} className="mr-1" />
                 <span className="text-sm">Annuler</span>
               </button>
 
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium" style={{ color: '#F5F5F5' }}>
                 {title}
               </h3>
 
               <button
                 onClick={handleSave}
-                className="bg-gray-800 text-white px-4 py-1 rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
+                className="px-4 py-1 rounded-lg text-sm font-medium transition-colors"
+                style={{ backgroundColor: '#F97316', color: '#121212' }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#EA580C')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#F97316')}
               >
                 Enregistrer
               </button>
@@ -58,11 +66,11 @@ export default function Modal({ isOpen, onClose, title, children, onSave }: Moda
           </div>
 
           {/* Content */}
-          <div className="bg-gray-900 text-white">
+          <div className="text-white" style={{ backgroundColor: '#121212' }}>
             {children}
           </div>
         </div>
       </div>
     </div>
   );
-} 
+}
