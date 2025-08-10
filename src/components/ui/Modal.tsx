@@ -41,7 +41,7 @@ export default function Modal({ isOpen, onClose, title, children, onSave, disabl
             <div className="flex items-center justify-between">
               <button
                 onClick={onClose}
-                className="flex items-center"
+                className="flex items-center text-xs md:text-sm"
                 style={{ color: '#F5F5F5' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#F97316')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = '#F5F5F5')}
@@ -50,13 +50,13 @@ export default function Modal({ isOpen, onClose, title, children, onSave, disabl
                 <span className="text-sm">Annuler</span>
               </button>
 
-              <h3 className="text-lg font-medium" style={{ color: '#F5F5F5' }}>
+              <h3 className="font-medium truncate text-base md:text-lg" style={{ color: '#F5F5F5', maxWidth: '55%' }}>
                 {title}
               </h3>
 
               <button
                 onClick={handleSave}
-                className="px-4 py-1 rounded-lg text-sm font-medium transition-colors"
+                className="px-3 py-1 rounded-lg text-xs md:text-sm font-medium transition-colors"
                 style={{ backgroundColor: '#F97316', color: '#121212' }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#EA580C')}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#F97316')}
