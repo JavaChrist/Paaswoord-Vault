@@ -45,7 +45,7 @@ export default function Login() {
             />
           </div>
           <h2 className="text-3xl font-bold" style={{ color: '#F5F5F5' }}>
-            Password Vault
+            KeyBox
           </h2>
           <p className="mt-2 text-sm" style={{ color: '#B0B0B0' }}>
             Connectez-vous à votre coffre-fort sécurisé

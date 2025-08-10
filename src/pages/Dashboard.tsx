@@ -317,7 +317,7 @@ export default function Dashboard() {
         {/* Titre centré */}
         <div className="pt-6 pb-4">
           <h1 className="text-center text-xl font-medium" style={{ color: '#F5F5F5' }}>
-            Password Vault
+            KeyBox
           </h1>
           {isLoading && (
             <p className="text-center text-sm mt-2" style={{ color: '#B0B0B0' }}>
