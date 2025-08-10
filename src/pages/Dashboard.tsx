@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Search, Settings, Plus, Copy, LogOut } from 'lucide-react';
+import { Search, Settings, Plus, Copy, LogOut, KeyRound } from 'lucide-react';
 import AddPasswordModal from '../components/modals/AddPasswordModal';
 import ViewPasswordModal from '../components/modals/ViewPasswordModal';
 import CopyNotification from '../components/CopyNotification';
+import ChangePasswordModal from '../components/modals/ChangePasswordModal';
 import {
   getUserPasswords,
   addPassword,
@@ -29,6 +30,7 @@ export default function Dashboard() {
   const [passwordEntries, setPasswordEntries] = useState<PasswordEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   
 
   // Charger les mots de passe depuis Firebase
@@ -355,7 +357,16 @@ export default function Dashboard() {
                 className="absolute top-16 left-0 border rounded-xl shadow-2xl min-w-48 z-30 overflow-hidden"
                 style={{ backgroundColor: '#2A2A2A', borderColor: '#2A2A2A' }}
               >
-                
+                <button
+                  onClick={() => { setShowChangePassword(true); setShowSettings(false); }}
+                  className="w-full flex items-center gap-3 px-4 py-3 transition-colors"
+                  style={{ color: '#F5F5F5' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#EA580C'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <KeyRound size={18} />
+                  <span>Modifier mon mot de passe</span>
+                </button>
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 transition-colors"
@@ -553,6 +564,11 @@ export default function Dashboard() {
         isVisible={showCopyNotification}
         entryName={copiedEntryName}
         onHide={() => setShowCopyNotification(false)}
+      />
+      <ChangePasswordModal
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+        onChanged={() => console.info('Mot de passe modifié')}
       />
     </div >
   );
