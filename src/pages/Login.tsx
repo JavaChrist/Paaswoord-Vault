@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import VaultIcon from '../components/icons/VaultIcon';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -11,6 +10,8 @@ export default function Login() {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,11 +37,12 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center py-12 px-4" style={{ backgroundColor: '#121212' }}>
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div
-            className="mx-auto h-16 w-16 rounded-full flex items-center justify-center mb-6"
-            style={{ backgroundColor: '#F97316' }}
-          >
-            <VaultIcon size={40} color="#F5F5F5" />
+          <div className="mx-auto h-20 w-20 mb-6">
+            <img
+              src="/icon192.png"
+              alt="Password Vault Logo"
+              className="w-18 h-18 rounded-xl"
+            />
           </div>
           <h2 className="text-3xl font-bold" style={{ color: '#F5F5F5' }}>
             Password Vault
@@ -125,6 +127,8 @@ export default function Login() {
               </button>
             </div>
 
+            
+
             <div className="text-center">
               <p className="text-sm" style={{ color: '#B0B0B0' }}>
                 Pas encore de compte ?{' '}
@@ -142,6 +146,8 @@ export default function Login() {
           </form>
         </div>
       </div>
+
+      
     </div>
   );
 } 

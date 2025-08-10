@@ -29,6 +29,7 @@ export default function Dashboard() {
   const [passwordEntries, setPasswordEntries] = useState<PasswordEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
 
   // Charger les mots de passe depuis Firebase
   useEffect(() => {
@@ -50,6 +51,8 @@ export default function Dashboard() {
 
     loadPasswords();
   }, [currentUser]);
+
+  
 
 
 
@@ -352,6 +355,7 @@ export default function Dashboard() {
                 className="absolute top-16 left-0 border rounded-xl shadow-2xl min-w-48 z-30 overflow-hidden"
                 style={{ backgroundColor: '#2A2A2A', borderColor: '#2A2A2A' }}
               >
+                
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 transition-colors"
