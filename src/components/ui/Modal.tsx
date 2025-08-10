@@ -6,9 +6,10 @@ interface ModalProps {
   title: string;
   children: React.ReactNode;
   onSave?: () => void;
+  disableSave?: boolean;
 }
 
-export default function Modal({ isOpen, onClose, title, children, onSave }: ModalProps) {
+export default function Modal({ isOpen, onClose, title, children, onSave, disableSave = false }: ModalProps) {
   if (!isOpen) return null;
 
   const handleSave = () => {
@@ -59,6 +60,7 @@ export default function Modal({ isOpen, onClose, title, children, onSave }: Moda
                 style={{ backgroundColor: '#F97316', color: '#121212' }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#EA580C')}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#F97316')}
+                disabled={disableSave}
               >
                 Enregistrer
               </button>
