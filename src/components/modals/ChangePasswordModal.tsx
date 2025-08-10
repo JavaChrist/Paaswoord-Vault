@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Modal from '../../components/ui/Modal';
+import { useToast } from '../../contexts/ToastContext';
 import { auth } from '../../firebase/firebaseConfig';
 import {
   EmailAuthProvider,
@@ -21,6 +22,7 @@ export default function ChangePasswordModal({ isOpen, onClose, onChanged }: Chan
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [strength, setStrength] = useState<'weak' | 'medium' | 'strong' | 'empty'>('empty');
+  const { showToast } = useToast();
 
   const evaluateStrength = (value: string) => {
     if (!value) return 'empty' as const;
@@ -71,6 +73,7 @@ export default function ChangePasswordModal({ isOpen, onClose, onChanged }: Chan
       }
       await updatePassword(user, newPassword);
       setSuccess(true);
+      showToast('Mot de passe modifié avec succès', 'success');
       if (onChanged) onChanged();
       setTimeout(() => {
         onClose();
@@ -82,6 +85,7 @@ export default function ChangePasswordModal({ isOpen, onClose, onChanged }: Chan
           ? 'Mot de passe trop faible'
           : 'Impossible de modifier le mot de passe';
       setError(msg);
+      showToast(msg, 'error');
     } finally {
       setLoading(false);
     }

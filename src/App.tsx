@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Layout from './components/layout/Layout';
 import Login from './pages/Login';
@@ -22,11 +23,11 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <LoadingScreen isVisible={isLoading} />
-      
-      {!isLoading && (
-        <Router>
-          <Routes>
+      <ToastProvider>
+        <LoadingScreen isVisible={isLoading} />
+        {!isLoading && (
+          <Router>
+            <Routes>
             {/* Routes publiques */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -44,9 +45,10 @@ export default function App() {
             <Route path="/" element={<Navigate to="/vault" />} />
             <Route path="/dashboard" element={<Navigate to="/vault" />} />
             <Route path="*" element={<Navigate to="/vault" />} />
-          </Routes>
-        </Router>
-      )}
+            </Routes>
+          </Router>
+        )}
+      </ToastProvider>
     </AuthProvider>
   );
 }
