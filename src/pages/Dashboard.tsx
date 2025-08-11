@@ -5,6 +5,7 @@ import AddPasswordModal from '../components/modals/AddPasswordModal';
 import ViewPasswordModal from '../components/modals/ViewPasswordModal';
 import CopyNotification from '../components/CopyNotification';
 import ChangePasswordModal from '../components/modals/ChangePasswordModal';
+import BackupModal from '../components/modals/BackupModal';
 import AutoLogoutSelector from '../components/AutoLogoutSelector';
 import {
   getUserPasswords,
@@ -33,6 +34,7 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showAutoLogout, setShowAutoLogout] = useState(false);
+  const [showBackup, setShowBackup] = useState(false);
   
 
   // Charger les mots de passe depuis Firebase
@@ -390,6 +392,16 @@ export default function Dashboard() {
                   <LogOut size={18} />
                   <span>Déconnexion</span>
                 </button>
+                <button
+                  onClick={() => { setShowBackup(true); setShowSettings(false); }}
+                  className="w-full flex items-center gap-3 px-4 py-3 transition-colors"
+                  style={{ color: '#F5F5F5' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#EA580C'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <span className="inline-block w-4 h-4 rounded-sm" style={{ backgroundColor: '#F97316' }} />
+                  <span>Export / Import chiffré</span>
+                </button>
               </div>
             )}
           </div>
@@ -583,6 +595,7 @@ export default function Dashboard() {
         onClose={() => setShowChangePassword(false)}
         onChanged={() => console.info('Mot de passe modifié')}
       />
+      <BackupModal isOpen={showBackup} onClose={() => setShowBackup(false)} />
       {showAutoLogout && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="fixed inset-0 bg-black bg-opacity-60" onClick={() => setShowAutoLogout(false)} />
