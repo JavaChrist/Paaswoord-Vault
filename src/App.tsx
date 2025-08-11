@@ -22,8 +22,8 @@ export default function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <ToastProvider>
+    <ToastProvider>
+      <AuthProvider>
         <LoadingScreen isVisible={isLoading} />
         {!isLoading && (
           <Router>
@@ -48,7 +48,7 @@ export default function App() {
             </Routes>
           </Router>
         )}
-      </ToastProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ToastProvider>
   );
 }

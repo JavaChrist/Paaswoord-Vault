@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useToast } from './ToastContext';
 import {
   User,
   signInWithEmailAndPassword,
@@ -77,6 +78,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const { showToast } = useToast();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -99,6 +102,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (autoLogoutMinutes <= 0) return; // Jamais
       const inactiveMs = Date.now() - idleSince;
       const limitMs = autoLogoutMinutes * 60 * 1000;
+      const remainingMs = limitMs - inactiveMs;
+      if (remainingMs <= 30_000 && remainingMs > 0) {
+        showToast('Déconnexion automatique dans 30 secondes...', 'info', 2500);
+      }
       if (inactiveMs >= limitMs) {
         try {
           await signOut(auth);
