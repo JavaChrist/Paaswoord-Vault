@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Search, Settings, Plus, Copy, LogOut, KeyRound } from 'lucide-react';
+import { Search, Settings, Plus, Copy, LogOut, KeyRound, Clock } from 'lucide-react';
 import AddPasswordModal from '../components/modals/AddPasswordModal';
 import ViewPasswordModal from '../components/modals/ViewPasswordModal';
 import CopyNotification from '../components/CopyNotification';
 import ChangePasswordModal from '../components/modals/ChangePasswordModal';
+import AutoLogoutSelector from '../components/AutoLogoutSelector';
 import {
   getUserPasswords,
   addPassword,
@@ -31,6 +32,7 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showAutoLogout, setShowAutoLogout] = useState(false);
   
 
   // Charger les mots de passe depuis Firebase
@@ -369,6 +371,16 @@ export default function Dashboard() {
                   <span>Modifier mon mot de passe</span>
                 </button>
                 <button
+                  onClick={() => { setShowAutoLogout(true); setShowSettings(false); }}
+                  className="w-full flex items-center gap-3 px-4 py-3 transition-colors"
+                  style={{ color: '#F5F5F5' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#EA580C'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <Clock size={18} />
+                  <span>Déconnexion automatique</span>
+                </button>
+                <button
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 transition-colors"
                   style={{ color: '#F5F5F5' }}
@@ -571,6 +583,21 @@ export default function Dashboard() {
         onClose={() => setShowChangePassword(false)}
         onChanged={() => console.info('Mot de passe modifié')}
       />
+      {showAutoLogout && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="fixed inset-0 bg-black bg-opacity-60" onClick={() => setShowAutoLogout(false)} />
+          <div className="flex min-h-full items-center justify-center p-4">
+            <div className="relative w-full max-w-md rounded-2xl shadow-2xl border" style={{ backgroundColor: '#2A2A2A', borderColor: '#F97316' }}>
+              <div className="px-6 py-4 border-b" style={{ borderColor: '#F97316' }}>
+                <h3 className="text-base font-medium" style={{ color: '#F5F5F5' }}>Déconnexion automatique</h3>
+              </div>
+              <div className="p-6 space-y-4" style={{ backgroundColor: '#121212', color: '#F5F5F5' }}>
+                <AutoLogoutSelector onClose={() => setShowAutoLogout(false)} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div >
   );
 } 

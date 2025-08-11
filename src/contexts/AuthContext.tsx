@@ -15,6 +15,8 @@ interface AuthContextType {
   register: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
+  autoLogoutMinutes: number;
+  setAutoLogoutMinutes: (minutes: number) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,7 +37,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [idleSince, setIdleSince] = useState<number | null>(null);
-  const AUTO_LOGOUT_MS = 15 * 60 * 1000; // 15 minutes
+  const [autoLogoutMinutes, setAutoLogoutMinutesState] = useState<number>(() => {
+    try {
+      const v = parseInt(localStorage.getItem('autoLogoutMinutes') || '15', 10);
+      return Number.isFinite(v) && v > 0 ? v : 15;
+    } catch {
+      return 15;
+    }
+  });
+  const setAutoLogoutMinutes = (minutes: number) => {
+    setAutoLogoutMinutesState(minutes);
+    try { localStorage.setItem('autoLogoutMinutes', String(minutes)); } catch {}
+  };
 
   const login = async (email: string, password: string) => {
     try {
@@ -84,7 +97,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (!currentUser) return;
       if (!idleSince) return;
       const inactiveMs = Date.now() - idleSince;
-      if (inactiveMs >= AUTO_LOGOUT_MS) {
+      const limitMs = autoLogoutMinutes * 60 * 1000;
+      if (inactiveMs >= limitMs) {
         try {
           await signOut(auth);
         } finally {
@@ -97,14 +111,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       events.forEach((evt) => window.removeEventListener(evt, resetIdle));
       window.clearInterval(interval);
     };
-  }, [currentUser, idleSince]);
+  }, [currentUser, idleSince, autoLogoutMinutes]);
 
   const value: AuthContextType = {
     currentUser,
     login,
     register,
     logout,
-    loading
+    loading,
+    autoLogoutMinutes,
+    setAutoLogoutMinutes,
   };
 
   return (
