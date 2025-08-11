@@ -223,10 +223,38 @@ export default function AddPasswordModal({ isOpen, onClose, onSave, onDelete, ed
 
   const handleDelete = () => {
     if (editMode && editData?.id && onDelete) {
-      if (confirm('Êtes-vous sûr de vouloir supprimer cette entrée ?')) {
+      const dialog = document.createElement('dialog');
+      dialog.style.padding = '0';
+      dialog.style.background = 'transparent';
+      dialog.innerHTML = `
+        <div class="fixed inset-0 z-[1000] flex items-center justify-center">
+          <div class="fixed inset-0 bg-black bg-opacity-60"></div>
+          <div class="relative w-full max-w-md rounded-2xl shadow-2xl border" style="background:#2A2A2A;border-color:#404040">
+            <div class="px-6 py-4 border-b" style="border-color:#404040">
+              <h3 class="text-base font-medium" style="color:#F5F5F5">Supprimer l'entrée</h3>
+            </div>
+            <div class="p-6" style="background:#121212;color:#F5F5F5">
+              <p>Êtes-vous sûr de vouloir supprimer cette entrée ?</p>
+              <div class="mt-6 flex gap-3 justify-end">
+                <button id="cancelBtn" class="px-4 py-2 rounded-lg" style="background:#374151;color:#F5F5F5">Annuler</button>
+                <button id="confirmBtn" class="px-4 py-2 rounded-lg" style="background:#DC2626;color:#F5F5F5">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      document.body.appendChild(dialog);
+      // @ts-ignore
+      dialog.showModal?.();
+      const cleanup = () => {
+        dialog.close?.();
+        dialog.remove();
+      };
+      dialog.querySelector('#cancelBtn')?.addEventListener('click', () => cleanup());
+      dialog.querySelector('#confirmBtn')?.addEventListener('click', () => {
         onDelete(editData.id);
+        cleanup();
         onClose();
-      }
+      });
     }
   };
 
