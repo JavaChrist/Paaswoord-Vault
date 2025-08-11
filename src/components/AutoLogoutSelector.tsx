@@ -7,7 +7,7 @@ export default function AutoLogoutSelector({ onClose }: Props) {
   const { autoLogoutMinutes, setAutoLogoutMinutes } = useAuth();
   const [value, setValue] = useState<number>(autoLogoutMinutes);
 
-  const options = [1, 5, 15, 30];
+  const options = [0, 1, 5, 15, 30];
 
   const save = () => {
     setAutoLogoutMinutes(value);
@@ -31,7 +31,7 @@ export default function AutoLogoutSelector({ onClose }: Props) {
               color: value === m ? '#121212' : '#F5F5F5'
             }}
           >
-            {m} min
+            {m === 0 ? 'Jamais' : `${m} min`}
           </button>
         ))}
       </div>

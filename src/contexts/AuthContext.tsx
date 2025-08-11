@@ -96,6 +96,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const interval = window.setInterval(async () => {
       if (!currentUser) return;
       if (!idleSince) return;
+      if (autoLogoutMinutes <= 0) return; // Jamais
       const inactiveMs = Date.now() - idleSince;
       const limitMs = autoLogoutMinutes * 60 * 1000;
       if (inactiveMs >= limitMs) {
