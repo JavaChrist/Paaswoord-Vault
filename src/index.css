@@ -113,6 +113,7 @@ textarea:focus,
 button:focus {
   outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2);
 }
 
 /* Animation pour les transitions */

@@ -34,6 +34,8 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [idleSince, setIdleSince] = useState<number | null>(null);
+  const AUTO_LOGOUT_MS = 15 * 60 * 1000; // 15 minutes
 
   const login = async (email: string, password: string) => {
     try {
@@ -70,6 +72,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     return unsubscribe;
   }, []);
+
+  // Auto-logout on inactivity
+  useEffect(() => {
+    const resetIdle = () => setIdleSince(Date.now());
+    const events = ['mousemove', 'keydown', 'touchstart', 'scroll', 'click', 'visibilitychange'];
+    events.forEach((evt) => window.addEventListener(evt, resetIdle, { passive: true }));
+    resetIdle();
+
+    const interval = window.setInterval(async () => {
+      if (!currentUser) return;
+      if (!idleSince) return;
+      const inactiveMs = Date.now() - idleSince;
+      if (inactiveMs >= AUTO_LOGOUT_MS) {
+        try {
+          await signOut(auth);
+        } finally {
+          setIdleSince(null);
+        }
+      }
+    }, 30 * 1000); // check every 30s
+
+    return () => {
+      events.forEach((evt) => window.removeEventListener(evt, resetIdle));
+      window.clearInterval(interval);
+    };
+  }, [currentUser, idleSince]);
 
   const value: AuthContextType = {
     currentUser,

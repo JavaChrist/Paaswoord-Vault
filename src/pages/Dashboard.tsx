@@ -318,7 +318,8 @@ export default function Dashboard() {
       <div className="relative pt-safe">
         {/* Titre centré */}
         <div className="pt-6 pb-4">
-          <h1 className="text-center text-xl font-medium" style={{ color: '#F5F5F5' }}>
+          <h1 className="text-center text-xl font-medium flex items-center justify-center gap-2" style={{ color: '#F5F5F5' }}>
+            <img src="/icon192.png" alt="KeyBox Logo" className="h-6 w-6 rounded" />
             KeyBox
           </h1>
           {isLoading && (

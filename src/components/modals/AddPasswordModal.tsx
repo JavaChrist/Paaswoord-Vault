@@ -229,8 +229,8 @@ export default function AddPasswordModal({ isOpen, onClose, onSave, onDelete, ed
       dialog.innerHTML = `
         <div class="fixed inset-0 z-[1000] flex items-center justify-center">
           <div class="fixed inset-0 bg-black bg-opacity-60"></div>
-          <div class="relative w-full max-w-md rounded-2xl shadow-2xl border" style="background:#2A2A2A;border-color:#404040">
-            <div class="px-6 py-4 border-b" style="border-color:#404040">
+          <div class="relative w-full max-w-md rounded-2xl shadow-2xl border overflow-hidden" style="background:#2A2A2A;border-color:#F97316">
+            <div class="px-6 py-4 border-b" style="border-color:#F97316">
               <h3 class="text-base font-medium" style="color:#F5F5F5">Supprimer l'entrée</h3>
             </div>
             <div class="p-6" style="background:#121212;color:#F5F5F5">
@@ -402,12 +402,12 @@ export default function AddPasswordModal({ isOpen, onClose, onSave, onDelete, ed
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className="relative w-full max-w-md transform overflow-hidden rounded-2xl shadow-2xl transition-all"
-          style={{ backgroundColor: '#2A2A2A', zIndex: 50 }}
+          style={{ backgroundColor: '#2A2A2A', zIndex: 50, border: '1px solid #F97316' }}
         >
           {/* Header avec nom du compte */}
           <div
             className="px-6 py-4 border-b"
-            style={{ backgroundColor: '#2A2A2A', borderColor: '#404040' }}
+            style={{ backgroundColor: '#2A2A2A', borderColor: '#F97316' }}
           >
             <div className="flex items-center justify-between mb-4">
               <button

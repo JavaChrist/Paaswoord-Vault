@@ -34,10 +34,10 @@ export default function Modal({ isOpen, onClose, title, children, onSave, disabl
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className="relative w-full max-w-md transform overflow-hidden rounded-2xl shadow-2xl transition-all"
-          style={{ backgroundColor: '#2A2A2A', border: '1px solid #404040' }}
+          style={{ backgroundColor: '#2A2A2A', border: '1px solid #F97316' }}
         >
           {/* Header */}
-          <div className="px-6 py-4 border-b" style={{ borderColor: '#404040' }}>
+          <div className="px-6 py-4 border-b" style={{ borderColor: '#F97316' }}>
             <div className="flex items-center justify-between">
               <button
                 onClick={onClose}
