@@ -600,7 +600,7 @@ export default function Dashboard() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="fixed inset-0 bg-black bg-opacity-60" onClick={() => setShowAutoLogout(false)} />
           <div className="flex min-h-full items-center justify-center p-4">
-            <div className="relative w-full max-w-md rounded-2xl shadow-2xl border" style={{ backgroundColor: '#2A2A2A', borderColor: '#F97316' }}>
+            <div className="relative w-full max-w-md rounded-2xl shadow-2xl border overflow-hidden" style={{ backgroundColor: '#2A2A2A', borderColor: '#F97316' }}>
               <div className="px-6 py-4 border-b" style={{ borderColor: '#F97316' }}>
                 <h3 className="text-base font-medium" style={{ color: '#F5F5F5' }}>Déconnexion automatique</h3>
               </div>
