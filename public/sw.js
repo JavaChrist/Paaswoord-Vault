@@ -1,4 +1,4 @@
-const CACHE_NAME = "pv-static-v2";
+const CACHE_NAME = "pv-static-v3";
 const SCOPE_PATH = new URL(self.registration.scope).pathname.replace(
   /\/$/,
   "/"
