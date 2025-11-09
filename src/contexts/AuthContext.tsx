@@ -91,39 +91,41 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Auto-logout on inactivity
   useEffect(() => {
-    const idleSinceRef = useRef<number | null>(null);
-    const warnedRef = useRef(false);
+    // Use plain locals instead of hooks here to avoid invalid hook calls
+    let idleAt: number | null = null;
+    let warned = false;
+
     const resetIdle = () => {
       const now = Date.now();
-      idleSinceRef.current = now;
-      warnedRef.current = false;
+      idleAt = now;
+      warned = false;
       setIdleSince(now);
     };
-    const events = ['mousemove', 'keydown', 'touchstart', 'scroll', 'click', 'visibilitychange'];
+    const events = ['mousemove', 'keydown', 'touchstart', 'scroll', 'click', 'visibilitychange'] as const;
     events.forEach((evt) => window.addEventListener(evt, resetIdle, { passive: true }));
     resetIdle();
 
     const interval = window.setInterval(async () => {
       if (!currentUser) return;
-      if (!idleSinceRef.current) return;
+      if (idleAt == null) return;
       if (autoLogoutMinutes <= 0) return; // Jamais
-      const inactiveMs = Date.now() - idleSinceRef.current;
+      const inactiveMs = Date.now() - idleAt;
       const limitMs = autoLogoutMinutes * 60 * 1000;
-      const remainingMs = limitMs - inactiveMs;
-      if (remainingMs <= 30_000 && remainingMs > 0 && !warnedRef.current) {
+      const remainingMs = Math.max(0, limitMs - inactiveMs);
+      if (remainingMs <= 30_000 && remainingMs > 0 && !warned) {
         showToast('Déconnexion automatique dans 30 secondes...', 'info', 2500);
-        warnedRef.current = true;
+        warned = true;
       }
       if (inactiveMs >= limitMs) {
         try {
           await signOut(auth);
         } finally {
-          idleSinceRef.current = null;
-          warnedRef.current = false;
+          idleAt = null;
+          warned = false;
           setIdleSince(null);
         }
       }
-    }, 30 * 1000); // check every 30s
+    }, 30_000);
 
     return () => {
       events.forEach((evt) => window.removeEventListener(evt, resetIdle));
