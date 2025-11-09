@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { useToast } from './ToastContext';
 import {
   User,
@@ -91,25 +91,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Auto-logout on inactivity
   useEffect(() => {
-    const resetIdle = () => setIdleSince(Date.now());
+    const idleSinceRef = useRef<number | null>(null);
+    const warnedRef = useRef(false);
+    const resetIdle = () => {
+      const now = Date.now();
+      idleSinceRef.current = now;
+      warnedRef.current = false;
+      setIdleSince(now);
+    };
     const events = ['mousemove', 'keydown', 'touchstart', 'scroll', 'click', 'visibilitychange'];
     events.forEach((evt) => window.addEventListener(evt, resetIdle, { passive: true }));
     resetIdle();
 
     const interval = window.setInterval(async () => {
       if (!currentUser) return;
-      if (!idleSince) return;
+      if (!idleSinceRef.current) return;
       if (autoLogoutMinutes <= 0) return; // Jamais
-      const inactiveMs = Date.now() - idleSince;
+      const inactiveMs = Date.now() - idleSinceRef.current;
       const limitMs = autoLogoutMinutes * 60 * 1000;
       const remainingMs = limitMs - inactiveMs;
-      if (remainingMs <= 30_000 && remainingMs > 0) {
+      if (remainingMs <= 30_000 && remainingMs > 0 && !warnedRef.current) {
         showToast('Déconnexion automatique dans 30 secondes...', 'info', 2500);
+        warnedRef.current = true;
       }
       if (inactiveMs >= limitMs) {
         try {
           await signOut(auth);
         } finally {
+          idleSinceRef.current = null;
+          warnedRef.current = false;
           setIdleSince(null);
         }
       }
@@ -119,7 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       events.forEach((evt) => window.removeEventListener(evt, resetIdle));
       window.clearInterval(interval);
     };
-  }, [currentUser, idleSince, autoLogoutMinutes]);
+  }, [currentUser, autoLogoutMinutes]);
 
   const value: AuthContextType = {
     currentUser,
