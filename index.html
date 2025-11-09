@@ -28,10 +28,16 @@
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
   <script>
+    // In dev, avoid registering SW to prevent stale caches; in production, ensure network before registering
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(() => console.log('SW registered'));
-      });
+      const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      if (!isLocal && navigator.onLine) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(() => console.log('SW registered'));
+        });
+      } else {
+        console.log('SW not registered in dev or offline mode');
+      }
     }
   </script>
 </body>
