@@ -661,7 +661,11 @@ export default function AddPasswordModal({ isOpen, onClose, onSave, onDelete, ed
                         style={{
                           backgroundColor: '#2A2A2A',
                           borderColor: '#404040',
-                          color: '#F5F5F5'
+                        color: '#F5F5F5',
+                          wordBreak: 'break-all',
+                          overflowWrap: 'anywhere',
+                          whiteSpace: 'pre-wrap',
+                          overflowX: 'auto'
                         }}
                         onFocus={(e) => e.currentTarget.style.borderColor = '#F97316'}
                         onBlur={(e) => e.currentTarget.style.borderColor = '#404040'}
@@ -736,7 +740,11 @@ export default function AddPasswordModal({ isOpen, onClose, onSave, onDelete, ed
                       style={{
                         backgroundColor: '#2A2A2A',
                         borderColor: '#404040',
-                        color: '#F5F5F5'
+                        color: '#F5F5F5',
+                        wordBreak: 'break-all',
+                        overflowWrap: 'anywhere',
+                        whiteSpace: 'pre-wrap',
+                        overflowX: 'auto'
                       }}
                       onFocus={(e) => e.currentTarget.style.borderColor = '#F97316'}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#404040'}
@@ -781,7 +789,11 @@ export default function AddPasswordModal({ isOpen, onClose, onSave, onDelete, ed
                       style={{
                         backgroundColor: '#2A2A2A',
                         borderColor: '#404040',
-                        color: '#F5F5F5'
+                        color: '#F5F5F5',
+                        wordBreak: 'break-all',
+                        overflowWrap: 'anywhere',
+                        whiteSpace: 'pre-wrap',
+                        overflowX: 'auto'
                       }}
                       onFocus={(e) => e.currentTarget.style.borderColor = '#F97316'}
                       onBlur={(e) => e.currentTarget.style.borderColor = '#404040'}

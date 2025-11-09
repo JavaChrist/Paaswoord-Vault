@@ -327,14 +327,18 @@ export default function ViewPasswordModal({ isOpen, onClose, onEdit, onCopy, ent
                     <label className="block text-sm font-medium mb-3" style={{ color: '#F5F5F5' }}>
                       Notes
                     </label>
-                    <div
-                      className="w-full px-4 py-3 border rounded-lg"
-                      style={{
-                        backgroundColor: '#2A2A2A',
-                        borderColor: '#404040',
-                        color: '#F5F5F5'
-                      }}
-                    >
+                      <div
+                        className="w-full px-4 py-3 border rounded-lg"
+                        style={{
+                          backgroundColor: '#2A2A2A',
+                          borderColor: '#404040',
+                          color: '#F5F5F5',
+                          wordBreak: 'break-all',
+                          overflowWrap: 'anywhere',
+                          whiteSpace: 'pre-wrap',
+                          overflowX: 'auto'
+                        }}
+                      >
                       {entry.notes}
                     </div>
                   </div>
@@ -385,14 +389,18 @@ export default function ViewPasswordModal({ isOpen, onClose, onEdit, onCopy, ent
                     <label className="block text-sm font-medium mb-3" style={{ color: '#F5F5F5' }}>
                       Notes
                     </label>
-                    <div
-                      className="w-full px-4 py-3 border rounded-lg"
-                      style={{
-                        backgroundColor: '#2A2A2A',
-                        borderColor: '#404040',
-                        color: '#F5F5F5'
-                      }}
-                    >
+                      <div
+                        className="w-full px-4 py-3 border rounded-lg"
+                        style={{
+                          backgroundColor: '#2A2A2A',
+                          borderColor: '#404040',
+                          color: '#F5F5F5',
+                          wordBreak: 'break-all',
+                          overflowWrap: 'anywhere',
+                          whiteSpace: 'pre-wrap',
+                          overflowX: 'auto'
+                        }}
+                      >
                       {entry.notes}
                     </div>
                   </div>
@@ -449,14 +457,18 @@ export default function ViewPasswordModal({ isOpen, onClose, onEdit, onCopy, ent
                     <label className="block text-sm font-medium mb-3" style={{ color: '#F5F5F5' }}>
                       Notes
                     </label>
-                    <div
-                      className="w-full px-4 py-3 border rounded-lg"
-                      style={{
-                        backgroundColor: '#2A2A2A',
-                        borderColor: '#404040',
-                        color: '#F5F5F5'
-                      }}
-                    >
+                      <div
+                        className="w-full px-4 py-3 border rounded-lg"
+                        style={{
+                          backgroundColor: '#2A2A2A',
+                          borderColor: '#404040',
+                          color: '#F5F5F5',
+                          wordBreak: 'break-all',
+                          overflowWrap: 'anywhere',
+                          whiteSpace: 'pre-wrap',
+                          overflowX: 'auto'
+                        }}
+                      >
                       {entry.notes}
                     </div>
                   </div>
@@ -586,14 +598,18 @@ export default function ViewPasswordModal({ isOpen, onClose, onEdit, onCopy, ent
                     <label className="block text-sm font-medium mb-3" style={{ color: '#F5F5F5' }}>
                       Notes
                     </label>
-                    <div
-                      className="w-full px-4 py-3 border rounded-lg"
-                      style={{
-                        backgroundColor: '#2A2A2A',
-                        borderColor: '#404040',
-                        color: '#F5F5F5'
-                      }}
-                    >
+                      <div
+                        className="w-full px-4 py-3 border rounded-lg"
+                        style={{
+                          backgroundColor: '#2A2A2A',
+                          borderColor: '#404040',
+                          color: '#F5F5F5',
+                          wordBreak: 'break-all',
+                          overflowWrap: 'anywhere',
+                          whiteSpace: 'pre-wrap',
+                          overflowX: 'auto'
+                        }}
+                      >
                       {entry.notes}
                     </div>
                   </div>
@@ -686,7 +702,11 @@ export default function ViewPasswordModal({ isOpen, onClose, onEdit, onCopy, ent
                       style={{
                         backgroundColor: '#2A2A2A',
                         borderColor: '#404040',
-                        color: '#F5F5F5'
+                        color: '#F5F5F5',
+                        wordBreak: 'break-all',
+                        overflowWrap: 'anywhere',
+                        whiteSpace: 'pre-wrap',
+                        overflowX: 'auto'
                       }}
                     >
                       {entry.notes}
